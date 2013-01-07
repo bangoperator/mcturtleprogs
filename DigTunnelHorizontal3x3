@@ -1,0 +1,161 @@
+-- BEGIN FUNCTIONS --
+
+function CheckFuel()
+print("Checking fuel level...")
+print("Fuel level at " .. turtle.getFuelLevel())
+
+while turtle.getFuelLevel() < 80 do
+print("Fuel level low...")
+print("Refueling...")
+turtle.refuel()
+end
+
+print("Fuel level okay...")
+end
+
+function TurnAround()
+turtle.turnRight()
+turtle.turnRight()
+end
+
+function DetectAndDig()
+while turtle.detect() == true do
+turtle.dig()
+end
+end
+
+function DetectAndDigDown()
+if turtle.detectDown() then
+turtle.digDown()
+end
+turtle.down()
+end
+
+function MoveBackToDD()
+print("Moving back to disk drive...")
+for i=1,tunnelLength,1 do
+  turtle.back()
+end
+turtle.down()
+end
+
+function ResetVars()
+print("Cleaning counter and user input...")
+tunnelLength = 0
+counter = 0
+end
+
+function PlaceTorch()
+turtle.select(16)
+turtle.place() 
+end
+
+function DigLayer()
+
+CheckFuel()
+
+-- get in mid upper line
+print("get in mid upper line")
+while turtle.detect() == true do
+print("detected block")
+turtle.dig()
+sleep(0.6)
+end
+
+turtle.forward()
+
+turtle.turnLeft()
+
+-- check and dig left side upper line
+print("check and dig left side upper line")
+while turtle.detect() == true do
+print("detected block")
+turtle.dig()
+sleep(0.6)
+end
+
+-- turn around
+print("turn around")
+TurnAround()
+
+-- check and dig right side upper line
+print("check and dig right side upper line")
+while turtle.detect() == true do
+print("detected block")
+turtle.dig()
+sleep(0.6)
+end
+
+-- check and dig center block
+print("check and dig center block")
+DetectAndDigDown()
+
+-- check and dig right side mid line
+print("check and dig right side mid line")
+DetectAndDig()
+
+-- check and dig mid block bottom line
+print("check and dig mid block bottom line")
+DetectAndDigDown()
+
+-- check and dig right side bottom line
+print("check and dig right side bottom line")
+DetectAndDig()
+
+-- turn around
+print("turn around")
+TurnAround()
+
+-- check and dig right side upper line
+print("check and dig left side bottom line")
+while turtle.detect() == true do
+print("detected block")
+turtle.dig()
+sleep(0.6)
+end
+print("DEBUG: counter "..", result ".. math.fmod(counter,8))
+if math.fmod(counter,8) == 0 then
+print("Layer "..counter.."...Placing torch")
+PlaceTorch()
+end
+
+turtle.up()
+
+-- check and dig left side mid line
+print("check and dig left side mid line")
+DetectAndDig()
+
+turtle.up()
+turtle.turnRight()
+end
+
+function MoveBackToDD()
+print("Moving back to disk drive...")
+for i=1,tunnelLength,1 do
+	turtle.back()
+end
+end
+
+-- END FUNCTIONS --
+
+tunnelLength = 0
+counter = 0
+
+shell.run("clear")
+print("-- DTH3x3 2.0")
+print("DON'T FORGET TO PLACE  ANY SORT OF FUEL IN SLOT 1 AND A TORCH IN SLOT 16...")
+io.write "How long shall the tunnel be: "
+
+tunnelLength = io.read()
+tunnelLength = tonumber(tunnelLength)
+counter = tunnelLength
+
+while counter > 0 do
+	print("Digging layer " .. counter)
+	DigLayer()
+	counter = counter-1
+end
+
+-- back in position
+MoveBackToDD()
+ResetVars()
