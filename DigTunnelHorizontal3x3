@@ -1,16 +1,20 @@
 -- BEGIN FUNCTIONS --
 
+
 function CheckFuel()
 print("Checking fuel level...")
 print("Fuel level at " .. turtle.getFuelLevel())
 
-while turtle.getFuelLevel() < 80 do
+while turtle.getFuelLevel() < 100 do
 print("Fuel level low...")
 print("Refueling...")
-turtle.refuel()
+turtle.select(1)
+turtle.refuel(1)
 end
 
+if turtle.getFuelLevel() > 100 then
 print("Fuel level okay...")
+end
 end
 
 function TurnAround()
@@ -52,10 +56,9 @@ end
 
 function DigLayer()
 
-CheckFuel()
+
 
 -- get in mid upper line
-print("get in mid upper line")
 while turtle.detect() == true do
 print("detected block")
 turtle.dig()
@@ -67,7 +70,6 @@ turtle.forward()
 turtle.turnLeft()
 
 -- check and dig left side upper line
-print("check and dig left side upper line")
 while turtle.detect() == true do
 print("detected block")
 turtle.dig()
@@ -75,11 +77,9 @@ sleep(0.6)
 end
 
 -- turn around
-print("turn around")
 TurnAround()
 
 -- check and dig right side upper line
-print("check and dig right side upper line")
 while turtle.detect() == true do
 print("detected block")
 turtle.dig()
@@ -87,42 +87,32 @@ sleep(0.6)
 end
 
 -- check and dig center block
-print("check and dig center block")
 DetectAndDigDown()
 
 -- check and dig right side mid line
-print("check and dig right side mid line")
 DetectAndDig()
 
 -- check and dig mid block bottom line
-print("check and dig mid block bottom line")
 DetectAndDigDown()
 
 -- check and dig right side bottom line
-print("check and dig right side bottom line")
 DetectAndDig()
 
 -- turn around
-print("turn around")
 TurnAround()
 
 -- check and dig right side upper line
-print("check and dig left side bottom line")
 while turtle.detect() == true do
-print("detected block")
 turtle.dig()
 sleep(0.6)
 end
-print("DEBUG: counter "..", result ".. math.fmod(counter,8))
 if math.fmod(counter,8) == 0 then
-print("Layer "..counter.."...Placing torch")
 PlaceTorch()
 end
 
 turtle.up()
 
 -- check and dig left side mid line
-print("check and dig left side mid line")
 DetectAndDig()
 
 turtle.up()
@@ -151,6 +141,7 @@ tunnelLength = tonumber(tunnelLength)
 counter = tunnelLength
 
 while counter > 0 do
+	CheckFuel()
 	print("Digging layer " .. counter)
 	DigLayer()
 	counter = counter-1
